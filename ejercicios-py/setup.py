@@ -10,13 +10,13 @@ required = [
 'confluent-kafka==0.11.6'
 ]
 
-setup(name='python_base',
+setup(name='ejercicios_python',
       version=read('VERSION'),
       author="Francisco Huertas",
       author_email="pacohuertas@gmail.com",
       license="Apache2",
       packages=["ejercicios"],
-      description="Python base project",
+      description="Ejercicios modulo streaming UAH-ANGVD",
       long_description=read('README.md'),
       install_requires=required,
       classifiers=[
