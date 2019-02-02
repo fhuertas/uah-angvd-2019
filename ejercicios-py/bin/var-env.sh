@@ -4,5 +4,5 @@ export TEST_PYTHON_VERSION=(3 3.7)
 
 export TEST_VERBOSITY=3
 
-export PACKAGES=("package_1")
+export PACKAGES=("ejercicios")
 export TEST_FOLDERS=("tests")
