@@ -4,41 +4,42 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import com.fhuertas.uah.angvd.config.ConfigLoader
+import com.fhuertas.uah.angvd.config.Configs._
 import com.typesafe.config.ConfigFactory
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.scala.StreamsBuilder
 import org.apache.kafka.streams.scala.kstream._
 
 import scala.collection.JavaConverters._
-object Runner extends App {
 
-  import org.apache.kafka.streams.scala.Serdes._
+object Solution extends App with LazyLogging {
+
   import org.apache.kafka.streams.scala.ImplicitConversions._
-
-  lazy val NS = new {
-    val root = "ejercicio3"
-    val kafka = s"$root.kafka"
-    val topicInput = s"$root.topics.input"
-    val topicOutput = s"$root.topics.output"
-  }
+  import org.apache.kafka.streams.scala.Serdes._
 
   val config = ConfigFactory.load()
 
-  val kafkaConfig = ConfigLoader.loadAsMap(ConfigFactory.load(),Some(NS.kafka))
+  val kafkaConfig = ConfigLoader.loadAsMap(ConfigFactory.load(), Some(Ej3.kafka))
+
   val properties = {
     val p = new Properties()
     p.putAll(kafkaConfig.asJava)
     p
   }
+  val inputTopic  = config.getString(Ej3.input)
+  val outputTopic = config.getString(Ej3.output)
 
-  val builder = new StreamsBuilder()
-  val textLines: KStream[String, String] = builder.stream[String, String](config.getString(NS.topicInput))
+  val builder                            = new StreamsBuilder()
+  val textLines: KStream[String, String] = builder.stream[String, String](inputTopic)
+
   val wordCounts: KTable[String, String] = textLines
-    .flatMapValues(textLine => textLine.toLowerCase.split("\\W+"))
-    .groupBy((_, word) => word)
-    .count().mapValues(count => count.toString)
-  wordCounts.toStream.to(NS.topicOutput)
-
+    .flatMapValues(textLine ⇒ textLine.toLowerCase.split("\\W+"))
+    .groupBy((_, word) ⇒ word)
+    .count()
+    .mapValues(count ⇒ count.toString)
+  wordCounts.toStream.to(outputTopic)
+  logger.info(s"Word count exercise: Reading from $inputTopic. Result write to $outputTopic")
   val streams: KafkaStreams = new KafkaStreams(builder.build(), properties)
 
   // Always (and unconditionally) clean local state prior to starting the processing topology.

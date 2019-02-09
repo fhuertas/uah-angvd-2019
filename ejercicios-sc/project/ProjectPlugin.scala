@@ -15,18 +15,25 @@ object ProjectPlugin extends AutoPlugin {
       val scalaCheck      = "1.14.0"
       val scalaTest       = "3.0.5"
       val kafka           = "2.1.0"
+      val javaxWs         = "2.1.1"
+
     }
 
     lazy val settings: Seq[Def.Setting[_]] = Seq(
+      resolvers += Resolver.url("confluent", url("https://packages.confluent.io/maven/")),
       name := "ejercicios",
       libraryDependencies ++= Seq(
-        "ch.qos.logback"         % "logback-classic"     % V.logback,
-        "com.typesafe"           % "config"              % V.config,
-        "org.apache.kafka"       %% "kafka"              % V.kafka,
-        "org.log4s"              %% "log4s"              % V.log4s,
-        "org.scalacheck"         %% "scalacheck"         % V.scalaCheck % Test,
-        "org.scalatest"          %% "scalatest"          % V.scalaTest % Test,
-        "org.scala-lang.modules" %% "scala-java8-compat" % V.compatJavaScala,
+        "ch.qos.logback"         % "logback-classic"      % V.logback,
+        "com.typesafe"           % "config"               % V.config,
+        "org.apache.kafka"       %% "kafka"               % V.kafka,
+        "org.apache.kafka"       % "kafka-streams"        % V.kafka,
+        "org.apache.kafka"       %% "kafka-streams-scala" % V.kafka,
+        "org.log4s"              %% "log4s"               % V.log4s,
+        "org.scalacheck"         %% "scalacheck"          % V.scalaCheck % Test,
+        "org.scalatest"          %% "scalatest"           % V.scalaTest % Test,
+        "org.scala-lang.modules" %% "scala-java8-compat"  % V.compatJavaScala,
+        // workaround: https://github.com/sbt/sbt/issues/3618#issuecomment-413257502
+        ("javax.ws.rs" % "javax.ws.rs-api" % V.javaxWs).artifacts(Artifact("javax.ws.rs-api", "jar", "jar"))
       ),
       scalacOptions := Seq(
         "-encoding",

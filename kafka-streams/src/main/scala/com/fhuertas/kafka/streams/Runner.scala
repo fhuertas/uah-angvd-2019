@@ -26,8 +26,8 @@ object Runner extends App {
   val wordCounts: KTable[String, String] = textLines
     .flatMapValues(textLine => textLine.toLowerCase.split("\\W+"))
     .groupBy((_, word) => word)
-//    .count().mapValues(count => count.toString)
-  wordporquCounts.toStream.to("streams-wordcount-output")
+    .count().mapValues(count => count.toString)
+  wordCounts.toStream.to("streams-wordcount-output")
 
   val streams: KafkaStreams = new KafkaStreams(builder.build(), properties)
 
