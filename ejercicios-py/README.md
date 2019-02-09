@@ -9,6 +9,20 @@
 * `make package`. build the artifact
 * `make continuous-test TEST=<test folder> PACKAGE=<package> [ENV=<env folder>]` 
 
-## Optional environment var for makefile
+## Run commands
 
-* PYTHON_VERSION: The version of python. i.e. 3.4
+```bash
+# Build envirnment
+$ make clean env
+
+# Activate environment
+$ source env/bin/activate
+
+# Run run exercise
+(env) $ python -m ejercicios.ejercicio2.runner
+
+# Deactivate environment
+(env) $ deactivate
+```
+
+

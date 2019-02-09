@@ -1,8 +1,9 @@
-package com.fhuertas.kafka.streams
+package com.fhuertas.uah.angvd.ejercicio3
+
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
-import com.fhuertas.kafka.streams.config.ConfigLoader
+import com.fhuertas.uah.angvd.config.ConfigLoader
 import com.typesafe.config.ConfigFactory
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.scala.StreamsBuilder
@@ -14,7 +15,16 @@ object Runner extends App {
   import org.apache.kafka.streams.scala.Serdes._
   import org.apache.kafka.streams.scala.ImplicitConversions._
 
-  val kafkaConfig = ConfigLoader.loadAsMap(ConfigFactory.load(),Some("example.kafka"))
+  lazy val NS = new {
+    val root = "ejercicio3"
+    val kafka = s"$root.kafka"
+    val topicInput = s"$root.topics.input"
+    val topicOutput = s"$root.topics.output"
+  }
+
+  val config = ConfigFactory.load()
+
+  val kafkaConfig = ConfigLoader.loadAsMap(ConfigFactory.load(),Some(NS.kafka))
   val properties = {
     val p = new Properties()
     p.putAll(kafkaConfig.asJava)
@@ -22,12 +32,12 @@ object Runner extends App {
   }
 
   val builder = new StreamsBuilder()
-  val textLines: KStream[String, String] = builder.stream[String, String]("streams-plaintext-input")
+  val textLines: KStream[String, String] = builder.stream[String, String](config.getString(NS.topicInput))
   val wordCounts: KTable[String, String] = textLines
     .flatMapValues(textLine => textLine.toLowerCase.split("\\W+"))
     .groupBy((_, word) => word)
-//    .count().mapValues(count => count.toString)
-  wordporquCounts.toStream.to("streams-wordcount-output")
+    .count().mapValues(count => count.toString)
+  wordCounts.toStream.to(NS.topicOutput)
 
   val streams: KafkaStreams = new KafkaStreams(builder.build(), properties)
 

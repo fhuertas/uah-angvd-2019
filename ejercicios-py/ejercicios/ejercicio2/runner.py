@@ -1,5 +1,6 @@
 def main():
     # https://github.com/confluentinc/confluent-kafka-python
+    print("Ejercicio 2")
     pass
 
 
