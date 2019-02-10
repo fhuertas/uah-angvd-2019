@@ -23,6 +23,12 @@ def main():
         .option("host", "localhost") \
         .option("port", 9999) \
         .load()
+    # Query that "replicate" input
+    # query2 = lines \
+    #     .writeStream \
+    #     .outputMode("append") \
+    #     .format("console") \
+    #     .start()
 
     # Split the lines into words
     words = lines.select(
