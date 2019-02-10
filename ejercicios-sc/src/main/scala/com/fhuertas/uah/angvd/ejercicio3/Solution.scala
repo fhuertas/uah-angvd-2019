@@ -30,6 +30,8 @@ object Solution extends App with LazyLogging {
   val inputTopic  = config.getString(Ej3.input)
   val outputTopic = config.getString(Ej3.output)
 
+  logger.info(s"Word count exercise: Reading from $inputTopic. Result write to $outputTopic")
+
   val builder                            = new StreamsBuilder()
   val textLines: KStream[String, String] = builder.stream[String, String](inputTopic)
 
@@ -38,8 +40,11 @@ object Solution extends App with LazyLogging {
     .groupBy((_, word) ⇒ word)
     .count()
     .mapValues(count ⇒ count.toString)
+
+  // Other lines example
+  //  textLines.filter((_,value) => value.startsWith("ERROR:")).map((_,value) => ("ERROR", value.replaceFirst("ERROR:",""))).to("errors")
+  //  textLines.filter((_,value) => value.startsWith("ERROR:")).mapValues(value => value.length.toString).to("length-errors")
   wordCounts.toStream.to(outputTopic)
-  logger.info(s"Word count exercise: Reading from $inputTopic. Result write to $outputTopic")
   val streams: KafkaStreams = new KafkaStreams(builder.build(), properties)
 
   // Always (and unconditionally) clean local state prior to starting the processing topology.
