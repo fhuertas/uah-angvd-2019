@@ -7,7 +7,7 @@ def read(fname):
 
 
 required = [
-'confluent-kafka==0.11.6'
+    'confluent-kafka==0.11.6'
 ]
 
 setup(name='ejercicios_python',

@@ -8,6 +8,6 @@ echo "Building wheel..."
 "$BASEDIR/env/bin/python" setup.py bdist_wheel
 
 echo "Building egg..."
-"$BASEDIR/env/bin/python" setup.py sdist
+"$BASEDIR/env/bin/python" setup.py sdist --formats=gztar,zip
 
 VERSION=`cat $BASEDIR/VERSION`
