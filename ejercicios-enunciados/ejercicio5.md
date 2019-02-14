@@ -137,4 +137,7 @@ query.awaitTermination()
 
 ## Ejercicio 5
 
-  
+A partir de una fuente de socket, desarrollar jobs que realizen las siguientes acciones: 
+* A partir de la entrada, devolver la cantidad de latreas distintas que tiene cada entrada.
+* A partir de la entrada, eliminar las letras (solo digitos) y sumar todos los números que resulten, y sumar los 
+números al estado acumulado. (1a1, 2b, 33) -> (11, 2, 33) -> 47. (2w2) -> (22) -> 69

@@ -8,7 +8,6 @@ import re
 def build_context():
     builder = SparkSession \
         .builder \
-        .master("local[*]") \
         .appName("StructuredNetworkWordCount")
 
     if len(sys.argv) > 1:
@@ -16,7 +15,7 @@ def build_context():
     return builder.getOrCreate()
 
 
-def main():
+def job1():
     spark = build_context()
 
     lines = spark \
@@ -47,5 +46,34 @@ def main():
     query.awaitTermination()
 
 
+def job2():
+    spark = build_context()
+
+    lines = spark \
+        .readStream \
+        .format("socket") \
+        .option("host", "localhost") \
+        .option("port", 9999) \
+        .load()
+
+    # Split the lines into words
+
+    def only_vocals(string):
+        result = re.sub("[^aeiou]*", "", string)
+        return "".join(set(result))
+
+    udf_only_vocals = udf(only_vocals)
+
+    words = lines.withColumn("letters-count", length(udf_only_vocals("value")))
+
+    query = words \
+        .writeStream \
+        .outputMode("append") \
+        .format("console") \
+        .start()
+
+    query.awaitTermination()
+
+
 if __name__ == "__main__":
-    main()
+    job2()
