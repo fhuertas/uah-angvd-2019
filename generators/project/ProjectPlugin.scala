@@ -8,23 +8,25 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      val config          = "1.3.3"
-      val logback         = "1.2.3"
-      val log4s           = "1.6.1"
-      val scalaCheck      = "1.14.0"
-      val scalaTest       = "3.0.5"
-      val kafka           = "2.1.0"
+      val config     = "1.3.3"
+      val logback    = "1.2.3"
+      val log4s      = "1.6.1"
+      val scalaCheck = "1.14.0"
+      val scalaTest  = "3.0.5"
+      val kafka      = "2.1.0"
+      val jackson    = "2.9.8"
     }
 
     lazy val settings: Seq[Def.Setting[_]] = Seq(
       name := "generators",
       libraryDependencies ++= Seq(
-        "ch.qos.logback"         % "logback-classic"     % V.logback,
-        "com.typesafe"           % "config"              % V.config,
-        "org.log4s"              %% "log4s"              % V.log4s,
-        "org.apache.kafka"       %% "kafka"              % V.kafka,
-        "org.scalacheck"         %% "scalacheck"         % V.scalaCheck,
-        "org.scalatest"          %% "scalatest"          % V.scalaTest % Test,
+        "ch.qos.logback"               % "logback-classic"       % V.logback,
+        "com.typesafe"                 % "config"                % V.config,
+        "org.log4s"                    %% "log4s"                % V.log4s,
+        "org.apache.kafka"             %% "kafka"                % V.kafka,
+        "org.scalacheck"               %% "scalacheck"           % V.scalaCheck,
+        "org.scalatest"                %% "scalatest"            % V.scalaTest % Test,
+        "com.fasterxml.jackson.module" %% "jackson-module-scala" % V.jackson,
       ),
       scalacOptions := Seq(
         "-encoding",

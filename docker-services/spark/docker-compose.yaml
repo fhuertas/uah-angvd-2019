@@ -1,8 +1,13 @@
-version: '2'
+version: '3.5'
+networks:
+  default:
+    external:
+      name: cp-platform_default
 services:
   spark-master:
     env_file:
       - spark_master_env
+    hostname: spark-master
     image: fhuertas/spark-master:2.4.0-hadoop2.7
     container_name: spark-master
     ports:
@@ -11,18 +16,24 @@ services:
   spark-worker-1:
     env_file:
       - spark_worker_env
+    hostname: spark-worker-1
     image: fhuertas/spark-worker:2.4.0-hadoop2.7
     container_name: spark-worker-1
     depends_on:
       - spark-master
+    environment:
+      SPARK_WORKER_WEBUI_PORT: "30081"
     ports:
-      - "8081:8081"
+      - "30081:30081"
   spark-worker-2:
     env_file:
       - spark_worker_env
+    hostname: spark-worker-2
     image: fhuertas/spark-worker:2.4.0-hadoop2.7
     container_name: spark-worker-2
     depends_on:
       - spark-master
+    environment:
+      SPARK_WORKER_WEBUI_PORT: "20081"
     ports:
-      - "8082:8081"
+      - "20081:20081"

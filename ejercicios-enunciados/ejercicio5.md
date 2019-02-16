@@ -6,7 +6,7 @@ Levantar el servicio
 
 ```
 # desde la carpeta del servicio de spark.
-docker-compose down; docker-compose up
+docker-compose -p spark down; -p spark docker-compose up
 ```
 
 ## Como ejecutarlo

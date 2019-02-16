@@ -27,7 +27,7 @@ Desde la carpeta de cp-platform
 
 ```bash
 # Consola 1: Kafka y ksql 
-docker-compose down; docker-compose up ksql-server
+docker-compose -p cp-platform down; docker-compose -p cp-platform up ksql-server
 ```
 
 ```bash

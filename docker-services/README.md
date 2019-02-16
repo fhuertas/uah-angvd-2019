@@ -6,8 +6,8 @@ Este servicio se arranca con los siguientes comandos
 
 ```bash
 cd spark
-docker-compse down # Solo si es necesario limpiar un servicio anterior
-docker-compose up 
+docker-compse -p spark down # Solo si es necesario limpiar un servicio anterior
+docker-compose -p spark up 
 ```
 
 En los ficheros `spark/spark_master_env` y `spark/spark_worker_eng` se pueden configurar de 
@@ -29,8 +29,8 @@ No es necesario levantar todos los servicios del stack.
 
 ```bash
 cd cp-platform
-docker-compose down # si es necesario limpiar una instancia del servicio anterior
-docker-compose up [<id del servicio>] # Si no se indica nada se arrancan todos los servicios  
+docker-compose -p cp-platform down # si es necesario limpiar una instancia del servicio anterior
+docker-compose -p cp-platform up [<id del servicio>] # Si no se indica nada se arrancan todos los servicios  
 ```
 
 Identificadores de los servicios: 

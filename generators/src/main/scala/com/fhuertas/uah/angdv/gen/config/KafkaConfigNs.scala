@@ -1,7 +1,7 @@
 package com.fhuertas.uah.angdv.gen.config
 
 object KafkaConfigNs {
-  val Consumer  = "kafka.consumer"
+  val Producer  = "kafka.producer"
   val TotalTime = "time.total"
   val BatchTime = "time.batch"
 
