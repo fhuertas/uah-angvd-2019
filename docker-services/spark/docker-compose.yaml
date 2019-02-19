@@ -1,8 +1,5 @@
 version: '3.5'
-networks:
-  default:
-    external:
-      name: cp-platform_default
+
 services:
   spark-master:
     env_file:

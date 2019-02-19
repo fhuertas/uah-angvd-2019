@@ -1,20 +1,20 @@
 # KSQL
 
 Motor de consultas sobre topics de Kafka
-* Los datos tienen que estar estructurados, 
+* Los datos tienen que estar estructurados,
 * Existen dos tipos de entidades, Streams y Tablas
-* Las tablas son mutables por id, 
+* Las tablas son mutables por id,
 * Los streams son inmutables.
-* Compatible (desde version confluet platform 5.0.0) con AVRO, JSON, y CSV
-* Existen clientes graficos y de consola 
+* Compatible (desde la versión de confluet platform 5.0.0) con AVRO, JSON, y CSV
+* Existen clientes gráficos y de consola
 * Los datos de las consultas se persisten en kafka
 
 Las operaciones no son tan potentes como un motor SQL clásico. Algunas de las peculiaridades de las operaciones son:
-* Pueden existir datos en el topic, que si no cumplen la estructura de la tabla/stream, no se utilizan. 
+* Pueden existir datos en el topic, que si no cumplen la estructura de la tabla/stream, no se utilizan.
 * Las operaciones de Join en muchos de los casos necesitan ventanas temporales sobre las que funcionar
 * Las tablas solo se pueden unir mediante la clave, nunca mediante otro campo. 
-* Para muchas operacinoes sobre las tablas se utiliza el ultimo campo del identificador como elemento de tabla
-* Las uniones necestan que el número de particiones de las tablas sean las mismas. 
+* Para muchas operaciones sobre las tablas se utiliza el ultimo campo del identificador como elemento de tabla
+* Las uniones necesitan que el número de particiones de las tablas sean las mismas.
 
 
 ## Topics, Streams y Tablas
@@ -26,7 +26,7 @@ Levantar los servicios de kafka necesarios
 Desde la carpeta de cp-platform
 
 ```bash
-# Consola 1: Kafka y ksql 
+# Consola 1: Kafka y ksql
 docker-compose -p cp-platform down; docker-compose -p cp-platform up ksql-server
 ```
 
@@ -59,7 +59,7 @@ docker run --network cp-platform_default --rm --name datagen-users \
 ksql http://localhost:8088
 ```
 
-### Topics 
+### Topics
 
 ```
 show topics; -- Muestra todos los topics
@@ -74,7 +74,7 @@ SHOW STREAMS; -- Muestra los streams del servidor ksql
 
 CREATE STREAM pageviews_original (viewtime bigint, userid varchar, pageid varchar) WITH \
   (kafka_topic='pageviews', value_format='DELIMITED'); -- Crea un stream
-  
+
 DROP STREAM pageviews_original; -- Borra un stream
 ```
 
@@ -86,7 +86,7 @@ SHOW TABLES; -- Muestra las tablas de ksql
 
 CREATE TABLE users_original (registertime BIGINT, gender VARCHAR, regionid VARCHAR, userid VARCHAR) WITH \
   (kafka_topic='users', value_format='JSON', key = 'userid'); -- crea una tabla
-  
+
 DROP TABLE users_original
 
 ```
@@ -110,7 +110,7 @@ CREATE STREAM pageviews_female_like_89 \
     WITH (kafka_topic='pageviews_enriched_r8_r9') AS \
   SELECT * FROM pageviews_female \
     WHERE regionid LIKE '%_8' OR regionid LIKE '%_9';
-    
+
 CREATE TABLE pageviews_regions \
       WITH (VALUE_FORMAT='avro') AS \
     SELECT gender, regionid , COUNT(*) AS numusers \
@@ -118,15 +118,15 @@ CREATE TABLE pageviews_regions \
       WINDOW TUMBLING (size 30 second) \
     GROUP BY gender, regionid \
     HAVING COUNT(*) > 1;
-    
+
 CREATE TABLE pageviews_regions \
       WITH (VALUE_FORMAT='avro') AS \
     SELECT gender, regionid , COUNT(*) AS numusers \
     FROM pageviews_enriched \
       WINDOW TUMBLING (size 30 second) \
     GROUP BY gender, regionid \
-    HAVING COUNT(*) > 1; 
-    
+    HAVING COUNT(*) > 1;
+
 CREATE TABLE visits_users \
       WITH (VALUE_FORMAT = 'avro') AS \
     SELECT userid, pageid, COUNT(*) AS visits \
@@ -134,7 +134,7 @@ CREATE TABLE visits_users \
       WINDOW TUMBLING (size 1 minute) \
     GROUP BY userid, pageid \
     HAVING COUNT(*) > 1;
-    
+
 ```
 
 ## Joins
@@ -223,7 +223,7 @@ CREATE TABLE WAREHOUSE_SIZE (WAREHOUSE_ID INT, SQUARE_FOOTAGE DOUBLE) \
     WITH (KAFKA_TOPIC='warehouse_size', \
           VALUE_FORMAT='JSON', \
           KEY='WAREHOUSE_ID');
-          
+
 SELECT WL.WAREHOUSE_ID, WL.CITY, WL.COUNTRY, WS.SQUARE_FOOTAGE \
     FROM WAREHOUSE_LOCATION WL \
       inner JOIN WAREHOUSE_SIZE WS \
@@ -317,4 +317,3 @@ kafka-console-producer --topic t2 \
                        --property parse.key=true \
                        --property key.separator=:
 ```
-

@@ -12,7 +12,7 @@ docker-compose -p spark down; -p spark docker-compose up
 ## Como ejecutarlo
 
 Una aplicación de Spark Structured Streaming se puede ejecutar de varias formas
-* Desde la consola de pyspark. Util para exploraciones de forma rapida
+* Desde la consola de pyspark. Útil para exploraciones de forma rápida
 
 ```
 pyspark --py-files path/to/python/zip/ogg/or/py
@@ -26,8 +26,8 @@ la llamada lo que es muy util para aplicaciones en produción o pre-produción
 spark-submit --py-files path/to/python/zip/ogg/or/py --master spark://spark.host:7077 py-file.py
 ```
 
-* Con python (Incluido desde los entornos de desarrollo). Útil para el desarrollo
-de las aplcaciones. Es necesario indicar los parametros al crear el contexto en
+* Con Python (Incluido desde los entornos de desarrollo). Útil para el desarrollo
+de las aplicaciones. Es necesario indicar los parámetros al crear el contexto en
 la aplicación. y tener importado el modulo de pyspark
 
 ## Contar palabras.
@@ -137,7 +137,7 @@ query.awaitTermination()
 
 ## Ejercicio 5
 
-A partir de una fuente de socket, desarrollar jobs que realizen las siguientes acciones: 
+A partir de una fuente de socket, desarrollar jobs que realizen las siguientes acciones:
 * A partir de la entrada, devolver la cantidad de latreas distintas que tiene cada entrada.
-* A partir de la entrada, eliminar las letras (solo digitos) y sumar todos los números que resulten, y sumar los 
+* A partir de la entrada, eliminar las letras (solo digitos) y sumar todos los números que resulten, y sumar los
 números al estado acumulado. (1a1, 2b, 33) -> (11, 2, 33) -> 47. (2w2) -> (22) -> 69
