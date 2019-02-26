@@ -60,3 +60,5 @@ También es posible hacerlo usando como master `local[*]`
 # Dentro del contendor creado anteriormente ejecutarlo
 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 ejercicio6/solution.py
 ```
+Otros paquetes interesantes 
+ * org.apache.spark:spark-avro_2.11:2.4.0
