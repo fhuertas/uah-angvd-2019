@@ -13,41 +13,12 @@ docker-compose -p ejercicios down # si es necesario
 docker-compose -p ejercicios up broker-1 broker-2 broker-3
 ```
 
-#####Generador
+#####Poblar topic de usuarios
 ```bash
 # Poblar primer topic usuarios
 cd ~/Projects/uah-angvd-2019
 kafka-console-producer --broker-list localhost:19092,localhost:29092,localhost:39092 --topic users < files/users
 ```
-
-### Consideraciones
-
-#### Contexto de spark dentro
-
-Kafka tiene que ser accesible de la misma forma tanto por los workers de spark como por
-la maquina desde donde se lanza el Job. Como el entorno virtualizado tiene su propia red es necesario
-lanzar la consola desde una de las maquinas dentro de la red.
-
-```bash
-docker run -it --rm --name client \
-           -v /home/user/Projects/uah-angvd-2019/ejercicios-py/ejercicios/:/ejercicios \
-           --net ejercicios_default fhuertas/spark-base:2.4.0-hadoop2.7 bash
-```
-
-#### Conector de kafka para spark
-
-El conector de Kafka para Spark es proporcionado por un paquete externo,
-por lo tanto es necesario indicarlo al usar los servicio de pyspark o spark-submit
-
-Esto se realiza de la siguiente forma
-
-```bash
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 ....
-# o
-pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0 ....
-```
-
-También es posible hacerlo usando como master `local[*]`
 
 ### Ejecución
 
@@ -58,4 +29,11 @@ son necesarios kafka y avro. Es necesario hacerlo de la siguiente forma.
 # Dentro del contendor creado anteriormente ejecutarlo
 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.0,org.apache.spark:spark-avro_2.11:2.4.0 \
              --master local[*] ejercicio6/solution.py
+```
+Tras arrancar poblar el topic de mensajes
+
+```bash
+# Poblar primer topic usuarios
+cd ~/Projects/uah-angvd-2019
+kafka-console-producer --broker-list localhost:19092,localhost:29092,localhost:39092 --topic tweets < files/tweets
 ```
