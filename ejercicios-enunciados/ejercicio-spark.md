@@ -35,5 +35,5 @@ Tras arrancar poblar el topic de mensajes
 ```bash
 # Poblar primer topic usuarios
 cd ~/Projects/uah-angvd-2019
-kafka-console-producer --broker-list localhost:19092,localhost:29092,localhost:39092 --topic tweets < files/tweets
+kafka-console-producer --broker-list localhost:19092,localhost:29092,localhost:39092 --topic tweets < files/messages
 ```
