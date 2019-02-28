@@ -43,7 +43,7 @@ Ejecutar el ejemplo. Desde el path de los ejercicios de python
 
 ```
 make clean env package
-pyspark --py-files dist/ejercicios_python-1.0.0.zip --master spark://localhost:7077
+pyspark --py-files . --master local[*]
 # dentro de la consola de pyspark
 from ejercicios.ejercicio5 import solution
 solution.main()
@@ -53,7 +53,7 @@ solution.main()
 
 ```
 make clean env package
-spark-submit --master spark://localhost:7077 --py-files dist/ejercicios_python-1.0.0.zip \
+spark-submit --master spark://localhost:7077 --py-files . \
     ejercicios/ejercicio5/solution.py
 ```
 
