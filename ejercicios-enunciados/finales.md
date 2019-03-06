@@ -88,3 +88,13 @@ Dado un topic de kafka con el siguiente tipo de entradas
 
 Se debe hacer un programa que calcule la media de los números que hay en el topic. 
 
+# Proyecto
+
+Exponer en un documento un escenario de aplicación en donde exista procesamiento streaming y batch. 
+Explicar varios casos de uso implicados la aplicación y justificar por qué hay aplicar o no streaming en ellos. 
+
+Se debe entregar un documento con los siguientes apartados
+
+1) Exposición de la aplicación. Debe incluir una explicación general. 
+2) Detalle de las distintas piezas que forman parte del caso de uso.
+3) Detalle de varios casos de uso de la aplicación, justificando por qué se aplica o no streaming para cada caso de uso.
