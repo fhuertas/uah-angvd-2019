@@ -1,6 +1,7 @@
 # Ejercicio 1: Consumidor / Productor básico
-## Consumidor
-Realizar un programa en Python / Scala que simule eventos de sondas. El programa debe publicar un string en formato CSV en un topic de kafka cada cierto tiempo, por ejemplo 1 segundo
+## Productor
+Realizar un programa en Python / Scala que simule eventos de sondas. El programa debe producir
+un string en formato CSV en un topic de kafka cada cierto tiempo, por ejemplo 1 segundo
 
 Ejemplo en formato CSV:
 ```csv
@@ -8,12 +9,12 @@ Ejemplo en formato CSV:
 20,40.48184,-3.364497
 26,23.1234,-8.364497
 ```
-## Productor.
-Realizar un productor que, a partir de una llamada a un servicio web, consulte los elementos 
+## Consumidor.
+Realizar un consumidor que, a partir de una llamada a un servicio web, consulte los elementos
 del un topic indicado a partir del path de la llamada
 
-Ejemplo: 
- * Llamada `curl http://localhost:8080/this-is-a-topic` 
+Ejemplo:
+ * Llamada `curl http://localhost:8080/this-is-a-topic`
  * Topic a consultar: `this-is-a-topic`
  * Resultado de la petición:
 ```json
@@ -42,12 +43,12 @@ users:
 
 messages:
 ```json
-{"id":1504451510296,"userId": "1234","userName":"aUser1","country":"es"}
-{"id":1494273403520,"userId": "1233","userName":"aUser3","country":"jp"}
-{"id":1494273403520,"userId": "1233","userName":"aUser3","country":"jp"}
-{"id":1505275563904,"userId": "223","userName":"aUser5","country":"co"}
+{"id":1504451510296,"userId": "1234", "text": "esto es un mensaje"}
+{"id":1494273403520,"userId": "1233", "text": "hola mundo"}
+{"id":1494273403520,"userId": "1233", "text": "hello world"}
+{"id":1505275563904,"userId": "223", "text": "Mensaje del usuario 223"}
 ```
- 
+
 Buscamos enriquecer el contenido de `messages` con el userName y el country
 
 Preguntas:
@@ -86,15 +87,15 @@ Dado un topic de kafka con el siguiente tipo de entradas
 4
 ```
 
-Se debe hacer un programa que calcule la media de los números que hay en el topic. 
+Se debe hacer un programa que calcule la media de los números que hay en el topic.
 
 # Proyecto
 
-Exponer en un documento un escenario de aplicación en donde exista procesamiento streaming y batch. 
-Explicar varios casos de uso implicados la aplicación y justificar por qué hay aplicar o no streaming en ellos. 
+Exponer en un documento un escenario de aplicación en donde exista procesamiento streaming y batch.
+Explicar varios casos de uso implicados la aplicación y justificar por qué hay aplicar o no streaming en ellos.
 
 Se debe entregar un documento con los siguientes apartados
 
-1) Exposición de la aplicación. Debe incluir una explicación general. 
+1) Exposición de la aplicación. Debe incluir una explicación general.
 2) Detalle de las distintas piezas que forman parte del caso de uso.
 3) Detalle de varios casos de uso de la aplicación, justificando por qué se aplica o no streaming para cada caso de uso.

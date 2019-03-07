@@ -8,7 +8,6 @@ import sys
 class ServerRequestHandler(BaseHTTPRequestHandler):
     # GET
     def do_GET(self):
-        print("Make request for topic {}".format(sys.argv[2]))
         # Send response status code
         self.send_response(200)
         path = self.path[1:]
