@@ -1,6 +1,10 @@
-from confluent_kafka import Consumer
-from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+from confluent_kafka import Consumer, KafkaError
+
+consumer_id = round(time.time() * 1000000)
+
 
 def consume_sensor(path):
     """
@@ -9,25 +13,27 @@ def consume_sensor(path):
     """
     c = Consumer({
         'bootstrap.servers': 'localhost:9092',
-        'group.id': round(time.time() * 1000000),
+        'group.id': consumer_id,
         'auto.offset.reset': 'earliest'
     })
 
     c.subscribe([path])
-
+    body = ""
     while True:
         msg = c.poll(1.0)
-
+        print(msg)
         if msg is None:
-            continue
-        if msg.error():
+            break
+        elif msg.error() and msg.error().code() == KafkaError._PARTITION_EOF:
+            print("Fin: {}".format(msg.error()))
+            break
+        elif msg.error():
             print("Consumer error: {}".format(msg.error()))
             continue
-
-        print('Received message: {}'.format(msg.value().decode('utf-8')))
-
+        content = msg.value().decode('utf-8')
+        body = "{}\n{}".format(body, content)
     c.close()
-
+    return body
 
 
 class ServerRequestHandler(BaseHTTPRequestHandler):
@@ -40,14 +46,15 @@ class ServerRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         print(path)
-        
-        consume_sensor(path)
+
+        body = consume_sensor(path)
+        self.wfile.write(bytes(body, "utf8"))
+        return
 
 
-#curl http://localhost:8080/this-is-a-topic
+# curl http://localhost:8080/this-is-a-topic
 
 if __name__ == "__main__":
-
     print('starting server...')
 
     port = 8080

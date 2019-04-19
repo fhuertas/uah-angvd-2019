@@ -1,5 +1,6 @@
 from confluent_kafka import Producer
 import numpy as np
+import time
 
 def generador_sondas():
     tem = int(np.random.randint(20,40, size = 1))
@@ -22,7 +23,9 @@ def producer_sondas():
         for val in range(1, 1000000):
             temp = generador_sondas()
             p.produce('this-is-a-topic',str(temp).encode('utf-8'), callback=delivery_report)
-            p.poll(1)
+            time.sleep(1)
+
+            # p.poll(1)
 
     except KeyboardInterrupt:
         pass
