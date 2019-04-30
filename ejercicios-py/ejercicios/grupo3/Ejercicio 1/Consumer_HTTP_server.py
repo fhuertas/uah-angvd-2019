@@ -1,11 +1,12 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from confluent_kafka import Consumer
-import time
 import json
+import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
+from confluent_kafka import Consumer
+
+group=round(time.time() * 1000)
 
 def get_reading_json(msg):
-
     data = msg.split(",")
 
     reading = {
@@ -37,34 +38,32 @@ class ServerRequestHandler(BaseHTTPRequestHandler):
 
         c = Consumer({
             'bootstrap.servers': 'localhost:9092',
-            'group.id': round(time.time() * 1000),
+            'group.id': group,
             'auto.offset.reset': 'earliest'
         })
 
         c.subscribe([path])
-
+        message = ""
         while True:
 
             msg = c.poll(1.0)
             if msg is None:
-                continue
+                break
             if msg.error():
                 print("Consumer error: {}".format(msg.error()))
                 continue
+            message += str(get_reading_json(msg.value().decode('utf-8')))
 
-            message = get_reading_json(msg.value().decode('utf-8'))
-
-            print('Received message: ', json.dumps(message))
+            print('Received message: ', message)
 
             # Send message back to client
 
-            self.wfile.write(bytes(json.dumps(message) + '\n', "utf8"))
-
+        self.wfile.write(bytes(json.dumps(message) + '\n', "utf8"))
         c.close()
+        return
 
 
 if __name__ == "__main__":
-
     print('starting server...')
     # Server settings
     # Choose port 8080, for port 80, which is normally used for a http server, you need root access
