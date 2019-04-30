@@ -1,40 +1,38 @@
 #!/usr/bin/env python
 
-import json
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from confluent_kafka import Consumer
 
+group = round(time.time() * 1000)
+
 
 def consumer(topic):
     c = Consumer({
         'bootstrap.servers': 'localhost:9092',
-        'group.id': round(time.time() * 1000),
+        'group.id': group,
         'auto.offset.reset': 'earliest'
     })
     c.subscribe([topic])
 
-    result = {'messages': []}
+    result = ""
 
-    msg = c.poll(10.0)
-    while msg:
+    while True:
+        msg = c.poll(1)
+        if msg is None:
+            break
         if msg.error():
             print("error{}".format(msg.error()))
             break
         msg = msg.value().decode('utf-8').split(",")
-        result['messages'].append({
-            "t": msg[0],
-            "location": {"lat": msg[1], "long": msg[2]}
-        })
-        msg = c.poll(0.5)
 
-    print(result)
-    with open('data.json', 'w') as salida:
-        json.dump(result, salida, indent=4)
+        result += str({"t": msg[0], "lat": msg[1], "long": msg[2]})
+        result += "\n"
 
     c.close()
+    return result
 
 
 # HTTPRequestHandler class
@@ -51,7 +49,9 @@ class ServerRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         # Send message back to client
-        consumer(path)
+        response=consumer(path)
+        self.wfile.write(bytes(response, "utf8"))
+
         return
 
 
